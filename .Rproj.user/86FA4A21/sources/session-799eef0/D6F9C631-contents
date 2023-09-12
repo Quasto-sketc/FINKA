@@ -1,0 +1,350 @@
+#' ## installing packages
+install.packages("readxl")
+library(readxl)
+
+#' ## loading file
+FINKA_DBF <- read_excel("Auswertung_DBF.xlsx", na="NA")
+
+Bodendaten <- read_excel("Bodendaten_2020.xlsx", na="NA")
+
+Erträge <- read_excel("Erträge_2021.xlsx", na="NA")
+
+
+str(Bodendaten)
+
+#' ## finale datei
+
+# finka <- read.delim("full_2021.csv", sep=";")
+
+#' ## join mit Bodendaten
+#' Laden der Packages
+
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(tidyselect)
+
+
+#' ## join mit Bodendaten und Erträgen
+
+finka_join <- inner_join(FINKA_DBF, Bodendaten, by = "Betrieb")
+
+finka_join2 <- inner_join(finka_join, Erträge, by = "Plotnummer")
+
+finka_join2 
+
+#' Exportieren des Sets als .csv 
+
+write.csv(finka_join2 ,"full_2021.csv", row.names = FALSE)
+
+
+#### -NA   
+### abline
+
+ggplot(finka_join2, aes(x=Ertrag_dt.ha, y=AZ, fill=Bewirtschaftung, color = Bewirtschaftung)) + 
+  geom_point() +
+  mytheme +
+  theme(legend.position = "right", axis.title.y = element_blank()) +
+  theme_classic() +
+  labs(x = "\n Ackerzahl", y = "Ertrag (dt/ha) \n ") +
+  color(values=c("yellow", "orange", "lightgreen"))
+
+
+
+ggplot(finka_join2, aes(x=Bewirtschaftung, y=Ertrag_dt.ha)) +
+  geom_boxplot() +
+  mytheme +
+  theme(legend.position = "right", axis.title.y = element_blank()) +
+  theme_classic() +
+  labs(x = "\n Bewirtschaftung", y = "Ertrag (dt/ha) \n ") +
+  geom_jitter(shape=16, position=position_jitter(0.4)) +
+  stat_boxplot(geom='errorbar', linetype=1, width=0.5)
+
+
+
+
+ggplot(finka_join2, aes(x=Bewirtschaftung, y=Ertrag_dt.ha)) +
+  geom_boxplot() +
+  mytheme +
+  theme(legend.position = "right", axis.title.y = element_blank()) +
+  theme_classic() +
+  labs(x = "\n Bewirtschaftung", y = "Ertrag (dt/ha) \n ") +
+  geom_jitter(shape=16, position=position_jitter(0.4)) +
+  stat_boxplot(geom='errorbar', linetype=1, width=0.5)
+  
+
+  abline()
+
+str(finka_join2)
+
+    
+    
+?ggplot2
+    
+  
+
+ggplot(finka_join2, aes(x=AZ, y=Deckungsgrad_Segetalarten_prozent, fill=Bewirtschaftung, color = Bewirtschaftung)) + 
+  geom_point() +
+  theme(legend.position = "right", axis.title.y = element_blank()) +
+  mytheme +
+  labs(x = "\n Ackerzahl", y = " Deckungsgrad Segetalarten [%] \n ")
+
+
+  ggplot(finka_join2, aes(x=Qualität, y=Ertrag_dt.ha, fill=Bewirtschaftung)) + 
+    geom_boxplot() +
+    theme_minimal() +
+    theme(legend.position = "right", axis.title.y = element_blank()) +
+    theme_classic() +
+    scale_fill_manual(values=c("yellow", "orange", "lightgreen")) +
+    geom_jitter(shape=16, position=position_jitter(0.4)) +
+    labs(x = "\n Qualität", y = "Ertrag (dt/ha) \n ") 
+  
+    
+    
+  ggplot(finka_join2, aes(x=Bodenart, y=Ertrag_dt.ha, fill=Bewirtschaftung)) + 
+    geom_boxplot() +
+    theme_minimal() +
+    theme(legend.position = "right", axis.title.y = element_blank()) +
+    theme_classic() +
+    scale_fill_manual(values=c("yellow", "orange", "lightgreen")) +
+    geom_jitter(shape=16, position=position_jitter(0.4)) +
+    labs(x = "\n Bodenart", y = "Ertrag (dt/ha) \n ") 
+  
+  
+  ggplot(finka_join2, aes(x=Bodenart, y=Deckungsgrad_Segetalarten_prozent, fill=Bewirtschaftung)) + 
+    geom_boxplot() +
+    theme_minimal() +
+    theme(legend.position = "right", axis.title.y = element_blank()) +
+    theme_classic() +
+    scale_fill_manual(values=c("yellow", "orange", "lightgreen")) +
+    geom_jitter(shape=16, position=position_jitter(0.4)) +
+    labs(x = "\n Bodenart", y = "Deckungsgrad_Segetalarten_prozent \n ") 
+  
+    
+  
+  ggplot(finka_join2, aes(x=Bewässerung, y=Ertrag_dt.ha, fill=Bewirtschaftung)) + 
+    geom_boxplot() +
+    theme_minimal() +
+    theme(legend.position = "right", axis.title.y = element_blank()) +
+    theme_classic() +
+    scale_fill_manual(values=c("yellow", "orange", "lightgreen")) +
+    geom_jitter(shape=16, position=position_jitter(0.4)) +
+    labs(x = "\n Bewässerung", y = "Ertrag_dt/ha \n ") 
+  
+  
+  
++
+  labs(x = "\n Deckungsgrad_Kultur_prozent", y = "AZ \n ") 
+  scale_fill_manual(values=c("white", "white", "white")) +
+  theme(legend.position="none") +
+  stat_summary(fun=mean, geom="point", shape=23, size=4) +
+  xlim("konventionell","herbizidfrei", "ökologisch") +
+  stat_boxplot(geom='errorbar', linetype=1, width=0.5) # whiskers
+
+
+  
+
+
+### Mögliche Auswertung mit .csv
+
+#finka_dbf <- readr::read_delim("Finka_dbf.csv", delim = ";")^
+#longer <- pivot_longer 
+
+#' ## loading packages
+library(dplyr)
+library(scales)
+library(ggplot2)
+
+# Structure anschauen --> Ich brauche Numerics 
+str(FINKA_DBF)
+
+
+  #ggplot(FINKA_DBF, aes(x=Kulturfrucht, y=Hoehe_Segetalflora_m)) + 
+  #geom_boxplot() 
+  
+  #ggplot(FINKA_DBF, aes(x=Kulturfrucht, y=Deckungsgrad_Kultur_prozent)) + 
+  # geom_boxplot() 
+  
+  #ggplot(FINKA_DBF, aes(x=Kulturfrucht, y=Bluehquadrate_Mittel_Blühpflanzen_n)) + 
+  # geom_boxplot()
+  
+  #ggplot(FINKA_DBF, aes(x=Kulturfrucht, y=Artenzahl_RL_VL_Deutschland_Plot_100_qm_n)) + 
+  # geom_boxplot()
+  
+  #ggplot(FINKA_DBF, aes(x=Kulturfrucht, y=Artenzahl_RL_VL_Niedersachsen_Plot_100_qm_n)) + 
+  # geom_boxplot()
+  
+  #ggplot(FINKA_DBF, aes(x=Kulturfrucht, y=Hoehe_der_Kultur_m)) + 
+  # geom_boxplot()
+
+mytheme <- theme_classic() + 
+  theme(axis.line = element_line(color = "black", size=0.6), 
+        axis.text = element_text(size = 13, color = "black"), 
+        axis.title = element_text(size = 13, color = "black"), 
+        axis.ticks = element_line(size = 0.6, color = "black"))
+        
+        
+#' ## Boxplots: x=Bewirtschaftung, y=Deckungsgrad_Kultur_prozent
+ggplot(FINKA_DBF, aes(x=Bewirtschaftung, y=Deckungsgrad_Kultur_prozent, fill=Bewirtschaftung)) + 
+  geom_boxplot() +
+  mytheme +
+  labs(x = "\n Bewirtschaftung", y = "Deckungsgrad Kultur [%] \n ") +
+  scale_fill_manual(values=c("white", "white", "white")) +
+  theme(legend.position="none") +
+  stat_summary(fun=mean, geom="point", shape=23, size=4) +
+  geom_jitter(shape=16, position=position_jitter(0.2)) +
+  xlim("konventionell","herbizidfrei", "ökologisch") +
+  stat_boxplot(geom='errorbar', linetype=1, width=0.5) # whiskers
+
+
+#' ## Boxplots: x=Bewirtschaftung, y=Deckungsgrad_Segetalarten_prozent
+ggplot(FINKA_DBF, aes(x=Bewirtschaftung, y=Deckungsgrad_Segetalarten_prozent, fill=Bewirtschaftung)) + 
+  geom_boxplot() +
+  labs(x = "\n Bewirtschaftung", y = "Deckungsgrad Segetalarten [%] \n ") +
+  mytheme +
+  scale_fill_manual(values=c("white", "white", "white")) +
+  theme(legend.position="none") +
+  stat_summary(fun.y=mean, geom="point", shape=23, size=4) +
+  geom_jitter(shape=16, position=position_jitter(0.2)) +
+  xlim("konventionell","herbizidfrei", "ökologisch") +
+  stat_boxplot(geom='errorbar', linetype=1, width=0.5) # whiskers
+  
+
+
+ggplot(FINKA_DBF, aes(x=Bewirtschaftung, y=Hoehe_Segetalflora_m, fill=Bewirtschaftung)) + 
+  geom_boxplot() +
+  labs(x = "\n Bewirtschaftung", y = "Höhe der Segetalflora in [m] \n ") +
+  mytheme +
+  scale_fill_manual(values=c("white", "white", "white")) +
+  theme(legend.position="none") +
+  stat_summary(fun.y=mean, geom="point", shape=23, size=4) +
+  geom_jitter(shape=16, position=position_jitter(0.2)) +
+  xlim("konventionell","herbizidfrei", "ökologisch") +
+  stat_boxplot(geom='errorbar', linetype=1, width=0.5) # whiskers
+
+  
+
+ggplot(FINKA_DBF, aes(x=Bewirtschaftung, y=Artenzahl_HNV_Kennarten_100_qm_n, fill=Bewirtschaftung)) + 
+  geom_boxplot() +
+  labs(x = "\n Bewirtschaftung", y = "Artenzahl HNV-Kennarten 100 m² [n] \n ") +
+  mytheme +
+  scale_fill_manual(values=c("white", "white", "white")) +
+  theme(legend.position="none") +
+  stat_summary(fun.y=mean, geom="point", shape=23, size=4) +
+  geom_jitter(shape=16, position=position_jitter(0.2)) +
+  xlim("konventionell","herbizidfrei", "ökologisch") +
+  stat_boxplot(geom='errorbar', linetype=1, width=0.5) # whiskers
+
+
+ggplot(FINKA_DBF, aes(x=Bewirtschaftung, y=Bluehquadrate_Mittel_Blühpflanzen_n, fill=Bewirtschaftung)) + 
+  geom_boxplot() +
+  labs(x = "\n Bewirtschaftung", y = "Bluehquadrate Blühpflanzen [n] \n ") +
+  mytheme +
+  scale_fill_manual(values=c("white", "white", "white")) +
+  theme(legend.position="none") +
+  stat_summary(fun.y=mean, geom="point", shape=23, size=4) +
+  geom_jitter(shape=16, position=position_jitter(0.2)) +
+  xlim("konventionell","herbizidfrei", "ökologisch") +
+  stat_boxplot(geom='errorbar', linetype=1, width=0.5) # whiskers
+
+
+
+ggplot(FINKA_DBF, aes(x=Bewirtschaftung, y=Hoehe_der_Kultur_m, fill=Bewirtschaftung)) + 
+  geom_boxplot() +
+  labs(x = "\n Bewirtschaftung", y = "Höhe der Kultur (m) \n ") +
+  mytheme +
+  scale_fill_manual(values=c("white", "white", "white")) +
+  theme(legend.position="none") +
+  stat_summary(fun.y=mean, geom="point", shape=23, size=4) +
+  geom_jitter(shape=16, position=position_jitter(0.2)) +
+  xlim("konventionell","herbizidfrei", "ökologisch") +
+  stat_boxplot(geom='errorbar', linetype=1, width=0.5) # whiskers
+
+
+
+ggplot(FINKA_DBF, aes(x=Bewirtschaftung, y=Artenzahl_Plot_100_qm_Graeser_n, fill=Bewirtschaftung)) + 
+  geom_boxplot() +
+  labs(x = "\n Bewirtschaftung", y = "Artenzahl Plot 100 m² - Gräser [n] \n ") +
+  mytheme +
+  scale_fill_manual(values=c("white", "white", "white")) +
+  theme(legend.position="none") +
+  stat_summary(fun.y=mean, geom="point", shape=23, size=4) +
+  geom_jitter(shape=16, position=position_jitter(0.2)) +
+  xlim("konventionell","herbizidfrei", "ökologisch") +
+  stat_boxplot(geom='errorbar', linetype=1, width=0.5) # whiskers
+
+
+#### GUT
+
+ggplot(FINKA_DBF, aes(x=Bewirtschaftung, y=Artenzahl_Plot_100_qm_Spontanflora_n, fill=Bewirtschaftung)) + 
+  geom_boxplot() +
+  labs(x = "\n Bewirtschaftung", y = "Artenzahl Plot 100 m² - Spontanflora [n] \n ") +
+  mytheme +
+  scale_fill_manual(values=c("white", "white", "white")) +
+  theme(legend.position="none") +
+  stat_summary(fun.y=mean, geom="point", shape=23, size=4) +
+  geom_jitter(shape=16, position=position_jitter(0.2)) +
+  xlim("konventionell","herbizidfrei", "ökologisch") +
+  stat_boxplot(geom='errorbar', linetype=1, width=0.5) # whiskers
+
+  #  (aes(colour = Bewirtschaftung))
+  #  theme(panel.background = element_rect(fill = "white", colour = "grey50"))
+
+
+
+#### Special weil Kulturfrucht 
+ggplot(FINKA_DBF, aes(x=Kulturfrucht, y=Bluehquadrate_Mittel_Blühpflanzen_n, fill=Bewirtschaftung)) + 
+  geom_boxplot() +
+  labs(x = "\n Kulturfrucht [n]", y = "Bluehquadrate Blühpflanzen [n] \n ") +
+  mytheme +
+  scale_fill_manual(values=c("white", "white", "white")) +
+  theme(legend.position="none") +
+  stat_summary(fun.y=mean, geom="point", shape=23, size=4) +
+  geom_jitter(shape=16, position=position_jitter(0.2)) +
+  
+
+# Bearbeiten!
+# Speial!! #' ## Boxplots: x=Betrieb, y=Deckungsgrad_Segetalarten_prozent
+ggplot(FINKA_DBF, aes(x=Betrieb, y=Deckungsgrad_Segetalarten_prozent, fill=Bewirtschaftung)) + 
+  geom_boxplot() +
+  labs(x = "\n Bewirtschaftung", y = "Deckungsgrad Segetalarten [%] \n ") +
+  mytheme +
+  scale_fill_manual(values=c("white", "white", "white")) +
+  theme(legend.position="none") +
+  stat_summary(fun.y=mean, geom="point", shape=23, size=4) +
+  geom_jitter(shape=16, position=position_jitter(0.2)) +
+  stat_boxplot(geom='errorbar', linetype=1, width=0.5) # whiskers
+
+
+
+#' ## Barchart: x= Bewirtschaftung, y= Bluehquadrate Blühpflanzen [n]
+
+ggplot(FINKA_DBF, aes(x=Bewirtschaftung, y=Bluehquadrate_Mittel_Blühpflanzen_n, fill=Bewirtschaftung)) + 
+geom_col() +
+  labs(x = "\n Bewirtschaftung", y = "Bluehquadrate Blühpflanzen [n] \n ") +
+  mytheme  +
+  scale_fill_manual(values=c("grey", "grey", "grey")) +
+  theme(legend.position="none") +
+  xlim("konventionell","herbizidfrei", "ökologisch")
+  
+
+
+#, alpha, color, fill, group, linetype, size
+
+
+#' ## Pie: x= Kulturfrucht, y= Bluehquadrate_Mittel_Blühpflanzen_n
+
+pie(FINKA_DBF, labels = Bluehquadrate_Mittel_Blühpflanzen_n, clockwise = TRUE)
+
+
+pie(FINKA_DBF, x=Bluehquadrate_Mittel_Blühpflanzen_n, labels = names(x=Bewirtschaftung), edges = 200, radius = 0.8,
+    clockwise = FALSE, init.angle = if(clockwise) 90 else 0,
+    density = NULL, angle = 45, col = NULL, border = NULL,
+    lty = NULL, main = NULL)
+
+?pie
+
+pie()
+
+table(wahlstimme)
+
