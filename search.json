@@ -2,16 +2,23 @@
   {
     "objectID": "stats.html",
     "href": "stats.html",
-    "title": "Stats",
+    "title": "Statistik",
     "section": "",
     "text": "library(tibble)\nlibrary(tidyr)\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(tidyselect)\n\n#' ## installing packages\ninstall.packages(\"readxl\")\ninstall.packages()\nlibrary(readxl)\n\n#' ## loading file\nfinkaxl &lt;- read_excel(\"finka_full.xlsx\", na=\"NA\")\n\n\nwrite.csv(finkaxl ,\"full_2021.csv\", row.names = FALSE)\n\n\n\n#' ##\n\nfinka &lt;- read.delim(\"full_2021.csv\", sep=\",\")\n\nwrite.csv(finka2 ,\"finka_statistik.csv\", row.names = FALSE)\n\nfinka_statistik &lt;- read.delim(\"finka_statistik.csv\", sep=\",\")\n\nstr(finka_statistik)\n\n\n\n\n#Boxplot\npar(mfrows=c(1,2))\nboxplot(finka$AZ)\nboxplot(finka_statistik$Deckungsgrad_Kultur_prozent)\nboxplot(finka$Ertrag..dt.ha.)\n\n\n#Histogram\npar(mfrows=c(1,2))\nhistfinka_statistik$Deckungsgrad_Kultur_prozent)\nhist(df$yvar)\n\n\n\n### Korrelationsanalyse\n\n# Erstellung der Variablen\n\nm1 &lt;- aov(Deckungsgrad_Segetalarten_prozent ~ AZ, data = finka_statistik)\nm1 &lt;- aov(Deckungsgrad_Segetalarten_prozent ~ Prozentuale.Ab..zunahme, data = finka_statistik)\nm1 &lt;- aov(Deckungsgrad_Segetalarten_prozent ~ Prozentuale.Ab..zunahme, data = finka_statistik)\nm1 &lt;- aov(Ertrag_dt.ha ~ AZ, data = finka_join2)\n\nlinearregeression line()\n\n# Erstellung der Korrelationsanalye -&gt; Signifikanz\nsummary(m1)\n\n# Erstellung der Residualplots\nplot(finka_statistik$Deckungsgrad_Segetalarten_prozent, finka_statistik$AZ)\n\npar(mfrow=c(2,2))\nplot(m1)\n\n\n\n# test\n# test\n# test\n\nmodelled_xvars &lt;- seq(min, max, interval)\nmodelled_yvars &lt;- predict(m1, list(y=modelled_xvars))\nlines(modelled_xvars, modelled_yvars)\n\npar(mfrows=c(2,2))\nplot(m1)\n\n\n#global.model &lt;- lm(Deckungsgrad_Segetalarten_prozent ~ Deckungsgrad_Kultur_prozent + \nKulturfrucht + Aussaatzeitpunkt + Deckungsgrad_Segetalarten_prozent + \n  Artenzahl_Plot_100_qm_Spontanflora_n + Artenzahl_Plot_100_qm_Kulturpflanzen_n +\n  Artenzahl_Plot_100_qm_Graeser_n + Hoehe_Segetalflora_m +\n  Hoehe_der_Kultur_m + Artenzahl_RL_VL_Niedersachsen_Plot_100_qm_n +\n  Artenzahl_RL_VL_Deutschland_Plot_100_qm_n + Artenzahl_HNV_Kennarten_100_qm_n + \n  Bluehquadrate_Mittel_Blühpflanzen_n +\n  Größe + AZ + Qualität +\n  Prozentuale.Ab..zunahme, data = finka_statistik)\n\n\n#global.model &lt;- lm(Deckungsgrad_Segetalarten_prozent ~ Deckungsgrad_Kultur_prozent + \nKulturfrucht + Aussaatzeitpunkt + Deckungsgrad_Segetalarten_prozent + \n  Artenzahl_Plot_100_qm_Spontanflora_n + Artenzahl_Plot_100_qm_Kulturpflanzen_n +\n  Artenzahl_Plot_100_qm_Graeser_n + Hoehe_Segetalflora_m +\n  Hoehe_der_Kultur_m + Artenzahl_RL_VL_Niedersachsen_Plot_100_qm_n +\n  Artenzahl_RL_VL_Deutschland_Plot_100_qm_n + Artenzahl_HNV_Kennarten_100_qm_n + \n  Bluehquadrate_Mittel_Blühpflanzen_n +\n  AZ + Qualität +\n  Prozentuale.Ab..zunahme, data = finka_statistik)"
   },
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Webseite: Flora-Data Zum Projekt FINKA 2021-2025",
+    "title": "Flora-Data Zum Projekt FINKA",
     "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\nCredentials\n➡️ Dr. Stefan Meyer\n➡️ MSc. Johannes Quente\nEmail: johannes.quente@gmail.com"
+    "text": "Credentials\n➡️ Dr. Stefan Meyer\n➡️ MSc. Johannes Quente\nEmail: johannes.quente@gmail.com\nThis is a Quarto website"
+  },
+  {
+    "objectID": "FINKA Paare.html",
+    "href": "FINKA Paare.html",
+    "title": "FINKA Paare",
+    "section": "",
+    "text": "Bewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
   },
   {
     "objectID": "FINKA_23.html",
@@ -21,10 +28,10 @@
     "text": "Bewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n\n\n\n\n\n\n\n\nInteraktiv: Deckungsgrad_Segetalarten_prozent über alle Paare\n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
   },
   {
-    "objectID": "FINKA Paare.html",
-    "href": "FINKA Paare.html",
-    "title": "FINKA Paare",
+    "objectID": "FINKA_21_23.html",
+    "href": "FINKA_21_23.html",
+    "title": "FINKA 2021-2023",
     "section": "",
-    "text": "Bewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
+    "text": "# Laden der Packages\nlibrary(readxl)\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(tidyr)\nlibrary(tidyselect)\nlibrary(plotly)\nlibrary(stringr)\n\n#' ## loading file\nFINKA_23 &lt;- read_xlsx(\"FINKA - Vegetationstabelle 2023 - Stand 11.9.23.xlsx\", 7)\nFINKA_21 &lt;- read_xlsx(\"21_Auswertung_DBF.xlsx\")\nFINKA_22 &lt;- read_xlsx(\"FINKA - Vegetationstabelle 2022-01-10.xlsx\", 4)\n\nFINKA_21 &lt;- FINKA_21 %&gt;% mutate(\n  Jahr = \"2021\"\n)\n\nFINKA_22 &lt;- FINKA_22 %&gt;% mutate(\n  Jahr = \"2022\"\n)\n\nFINKA_23 &lt;- FINKA_DBF %&gt;% mutate(\n  Jahr = \"2023\"\n) %&gt;% \n  select(c(-7, -9,-11))\n\n\njoin_1 &lt;- inner_join(FINKA_21, FINKA_22, by = c( \"Schlagnummer/Plotnummer\")) \n\njoin_2 &lt;- semi_join(join_1, FINKA_22, by = \"Jahr\") \n\nFINKA_23 %&gt;% names()\n\nFINKA_23 &lt;- FINKA_23 %&gt;% mutate(\n  Deckungsgrad_Segetalarten_prozent = as.numeric(Deckungsgrad_Segetalarten_prozent),\n  HNV_Wertstufe = as.character(HNV_Wertstufe)\n)\n\nresult_1 &lt;- bind_rows(FINKA_21, FINKA_22)\n\nresult_2 &lt;- bind_rows(result_1, FINKA_23)\n\nselect &lt;- result_2 %&gt;% filter(Bewirtschaftung == \"herbizidfrei\")\n\nView(select)\n# Bodendaten &lt;- read_excel(\"Bodendaten_2020.xlsx\", na=\"NA\")\n# \n# Erträge &lt;- read_excel(\"Erträge_2021.xlsx\", na=\"NA\")\n\nFINKA_DBF_group &lt;- FINKA_DBF %&gt;%\n  mutate(Gruppe = as.character(str_extract(`Schlagnummer/Plotnummer`, \"\\\\d+\"))) %&gt;% \n  group_by(Gruppe) %&gt;% \n  mutate(Gruppe = factor(Gruppe, levels = as.character(1:31))) %&gt;% \n  mutate(Bewirtschaftung = factor(Bewirtschaftung, levels = c(\"konventionell\", \"herbizidfrei\", \"ökologisch\")))\n\n\nmytheme &lt;- theme_classic() + \n  theme(axis.line = element_line(color = \"black\", size=0.6), \n        axis.text = element_text(size = 13, color = \"black\"), \n        axis.title = element_text(size = 13, color = \"black\"), \n        axis.ticks = element_line(size = 0.6, color = \"black\"))\n\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n#' ## Boxplots: x=Bewirtschaftung, y=Deckungsgrad_Kultur_prozent\nggplot(select, aes(Bewirtschaftung, Deckungsgrad_Kultur_prozent, fill=Bewirtschaftung)) + \n  geom_boxplot() +\n  mytheme +\n  facet_wrap(~Jahr) +\n  labs(x = \"\\n Bewirtschaftung\", y = \"Deckungsgrad Kultur [%] \\n \") +\n  scale_fill_manual(values=c(\"white\", \"white\", \"white\")) +\n  theme(legend.position=\"none\") +\n  stat_summary(fun=mean, geom=\"point\", shape=23, size=4) +\n  geom_jitter(shape=16, position=position_jitter(0.2))\n  stat_boxplot(geom='errorbar', linetype=1, width=0.5) # whiskers"
   }
 ]
