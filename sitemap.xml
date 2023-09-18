@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://Quasto-sketc.github.io/FINKA/about.html</loc>
-    <lastmod>2023-09-12T01:46:17.456Z</lastmod>
-  </url>
-  <url>
-    <loc>https://Quasto-sketc.github.io/FINKA/FINKA_23.html</loc>
-    <lastmod>2023-09-12T01:46:17.005Z</lastmod>
+    <loc>https://Quasto-sketc.github.io/FINKA/stats.html</loc>
+    <lastmod>2023-09-18T15:55:48.514Z</lastmod>
   </url>
   <url>
     <loc>https://Quasto-sketc.github.io/FINKA/index.html</loc>
-    <lastmod>2023-09-12T01:46:17.223Z</lastmod>
+    <lastmod>2023-09-18T15:55:47.591Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Quasto-sketc.github.io/FINKA/FINKA_23.html</loc>
+    <lastmod>2023-09-18T15:55:45.575Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Quasto-sketc.github.io/FINKA/FINKA Paare.html</loc>
+    <lastmod>2023-09-18T15:55:47.353Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Quasto-sketc.github.io/FINKA/about.html</loc>
+    <lastmod>2023-09-18T15:55:47.791Z</lastmod>
   </url>
 </urlset>

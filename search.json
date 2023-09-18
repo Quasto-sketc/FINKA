@@ -1,16 +1,30 @@
 [
   {
-    "objectID": "FINKA_23.html",
-    "href": "FINKA_23.html",
-    "title": "FINKA_23",
+    "objectID": "stats.html",
+    "href": "stats.html",
+    "title": "Stats",
     "section": "",
-    "text": "Bewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n\n\n\n\n\n\n\n\nInteraktiv: Deckungsgrad_Segetalarten_prozent über alle Paare\n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
+    "text": "library(tibble)\nlibrary(tidyr)\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(tidyselect)\n\n#' ## installing packages\ninstall.packages(\"readxl\")\ninstall.packages()\nlibrary(readxl)\n\n#' ## loading file\nfinkaxl &lt;- read_excel(\"finka_full.xlsx\", na=\"NA\")\n\n\nwrite.csv(finkaxl ,\"full_2021.csv\", row.names = FALSE)\n\n\n\n#' ##\n\nfinka &lt;- read.delim(\"full_2021.csv\", sep=\",\")\n\nwrite.csv(finka2 ,\"finka_statistik.csv\", row.names = FALSE)\n\nfinka_statistik &lt;- read.delim(\"finka_statistik.csv\", sep=\",\")\n\nstr(finka_statistik)\n\n\n\n\n#Boxplot\npar(mfrows=c(1,2))\nboxplot(finka$AZ)\nboxplot(finka_statistik$Deckungsgrad_Kultur_prozent)\nboxplot(finka$Ertrag..dt.ha.)\n\n\n#Histogram\npar(mfrows=c(1,2))\nhistfinka_statistik$Deckungsgrad_Kultur_prozent)\nhist(df$yvar)\n\n\n\n### Korrelationsanalyse\n\n# Erstellung der Variablen\n\nm1 &lt;- aov(Deckungsgrad_Segetalarten_prozent ~ AZ, data = finka_statistik)\nm1 &lt;- aov(Deckungsgrad_Segetalarten_prozent ~ Prozentuale.Ab..zunahme, data = finka_statistik)\nm1 &lt;- aov(Deckungsgrad_Segetalarten_prozent ~ Prozentuale.Ab..zunahme, data = finka_statistik)\nm1 &lt;- aov(Ertrag_dt.ha ~ AZ, data = finka_join2)\n\nlinearregeression line()\n\n# Erstellung der Korrelationsanalye -&gt; Signifikanz\nsummary(m1)\n\n# Erstellung der Residualplots\nplot(finka_statistik$Deckungsgrad_Segetalarten_prozent, finka_statistik$AZ)\n\npar(mfrow=c(2,2))\nplot(m1)\n\n\n\n# test\n# test\n# test\n\nmodelled_xvars &lt;- seq(min, max, interval)\nmodelled_yvars &lt;- predict(m1, list(y=modelled_xvars))\nlines(modelled_xvars, modelled_yvars)\n\npar(mfrows=c(2,2))\nplot(m1)\n\n\n#global.model &lt;- lm(Deckungsgrad_Segetalarten_prozent ~ Deckungsgrad_Kultur_prozent + \nKulturfrucht + Aussaatzeitpunkt + Deckungsgrad_Segetalarten_prozent + \n  Artenzahl_Plot_100_qm_Spontanflora_n + Artenzahl_Plot_100_qm_Kulturpflanzen_n +\n  Artenzahl_Plot_100_qm_Graeser_n + Hoehe_Segetalflora_m +\n  Hoehe_der_Kultur_m + Artenzahl_RL_VL_Niedersachsen_Plot_100_qm_n +\n  Artenzahl_RL_VL_Deutschland_Plot_100_qm_n + Artenzahl_HNV_Kennarten_100_qm_n + \n  Bluehquadrate_Mittel_Blühpflanzen_n +\n  Größe + AZ + Qualität +\n  Prozentuale.Ab..zunahme, data = finka_statistik)\n\n\n#global.model &lt;- lm(Deckungsgrad_Segetalarten_prozent ~ Deckungsgrad_Kultur_prozent + \nKulturfrucht + Aussaatzeitpunkt + Deckungsgrad_Segetalarten_prozent + \n  Artenzahl_Plot_100_qm_Spontanflora_n + Artenzahl_Plot_100_qm_Kulturpflanzen_n +\n  Artenzahl_Plot_100_qm_Graeser_n + Hoehe_Segetalflora_m +\n  Hoehe_der_Kultur_m + Artenzahl_RL_VL_Niedersachsen_Plot_100_qm_n +\n  Artenzahl_RL_VL_Deutschland_Plot_100_qm_n + Artenzahl_HNV_Kennarten_100_qm_n + \n  Bluehquadrate_Mittel_Blühpflanzen_n +\n  AZ + Qualität +\n  Prozentuale.Ab..zunahme, data = finka_statistik)"
   },
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Data FINKA´23 Webseite",
+    "title": "Webseite: Flora-Data Zum Projekt FINKA 2021-2025",
     "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\nCredentials\nMSC. Johannes Quente\nEmail: johannes.quente@gmail.com"
+    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\nCredentials\n➡️ Dr. Stefan Meyer\n➡️ MSc. Johannes Quente\nEmail: johannes.quente@gmail.com"
+  },
+  {
+    "objectID": "FINKA_23.html",
+    "href": "FINKA_23.html",
+    "title": "FINKA Daten 23",
+    "section": "",
+    "text": "Bewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n\n\n\n\n\n\n\n\nInteraktiv: Deckungsgrad_Segetalarten_prozent über alle Paare\n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
+  },
+  {
+    "objectID": "FINKA Paare.html",
+    "href": "FINKA Paare.html",
+    "title": "FINKA Paare",
+    "section": "",
+    "text": "Bewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
   }
 ]

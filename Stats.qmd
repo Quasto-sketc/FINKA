@@ -1,0 +1,113 @@
+---
+title: "Stats"
+author: "Johannes Quente"
+---
+
+```{r}
+library(tibble)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(tidyselect)
+
+#' ## installing packages
+install.packages("readxl")
+install.packages()
+library(readxl)
+
+#' ## loading file
+finkaxl <- read_excel("finka_full.xlsx", na="NA")
+
+
+write.csv(finkaxl ,"full_2021.csv", row.names = FALSE)
+
+
+
+#' ##
+
+finka <- read.delim("full_2021.csv", sep=",")
+
+write.csv(finka2 ,"finka_statistik.csv", row.names = FALSE)
+
+finka_statistik <- read.delim("finka_statistik.csv", sep=",")
+
+str(finka_statistik)
+
+
+
+
+#Boxplot
+par(mfrows=c(1,2))
+boxplot(finka$AZ)
+boxplot(finka_statistik$Deckungsgrad_Kultur_prozent)
+boxplot(finka$Ertrag..dt.ha.)
+
+
+#Histogram
+par(mfrows=c(1,2))
+histfinka_statistik$Deckungsgrad_Kultur_prozent)
+hist(df$yvar)
+
+
+
+### Korrelationsanalyse
+
+# Erstellung der Variablen
+
+m1 <- aov(Deckungsgrad_Segetalarten_prozent ~ AZ, data = finka_statistik)
+m1 <- aov(Deckungsgrad_Segetalarten_prozent ~ Prozentuale.Ab..zunahme, data = finka_statistik)
+m1 <- aov(Deckungsgrad_Segetalarten_prozent ~ Prozentuale.Ab..zunahme, data = finka_statistik)
+m1 <- aov(Ertrag_dt.ha ~ AZ, data = finka_join2)
+
+linearregeression line()
+
+# Erstellung der Korrelationsanalye -> Signifikanz
+summary(m1)
+
+# Erstellung der Residualplots
+plot(finka_statistik$Deckungsgrad_Segetalarten_prozent, finka_statistik$AZ)
+
+par(mfrow=c(2,2))
+plot(m1)
+
+
+
+# test
+# test
+# test
+
+modelled_xvars <- seq(min, max, interval)
+modelled_yvars <- predict(m1, list(y=modelled_xvars))
+lines(modelled_xvars, modelled_yvars)
+
+par(mfrows=c(2,2))
+plot(m1)
+
+
+#global.model <- lm(Deckungsgrad_Segetalarten_prozent ~ Deckungsgrad_Kultur_prozent + 
+Kulturfrucht + Aussaatzeitpunkt + Deckungsgrad_Segetalarten_prozent + 
+  Artenzahl_Plot_100_qm_Spontanflora_n + Artenzahl_Plot_100_qm_Kulturpflanzen_n +
+  Artenzahl_Plot_100_qm_Graeser_n + Hoehe_Segetalflora_m +
+  Hoehe_der_Kultur_m + Artenzahl_RL_VL_Niedersachsen_Plot_100_qm_n +
+  Artenzahl_RL_VL_Deutschland_Plot_100_qm_n + Artenzahl_HNV_Kennarten_100_qm_n + 
+  Bluehquadrate_Mittel_Blühpflanzen_n +
+  Größe + AZ + Qualität +
+  Prozentuale.Ab..zunahme, data = finka_statistik)
+
+
+#global.model <- lm(Deckungsgrad_Segetalarten_prozent ~ Deckungsgrad_Kultur_prozent + 
+Kulturfrucht + Aussaatzeitpunkt + Deckungsgrad_Segetalarten_prozent + 
+  Artenzahl_Plot_100_qm_Spontanflora_n + Artenzahl_Plot_100_qm_Kulturpflanzen_n +
+  Artenzahl_Plot_100_qm_Graeser_n + Hoehe_Segetalflora_m +
+  Hoehe_der_Kultur_m + Artenzahl_RL_VL_Niedersachsen_Plot_100_qm_n +
+  Artenzahl_RL_VL_Deutschland_Plot_100_qm_n + Artenzahl_HNV_Kennarten_100_qm_n + 
+  Bluehquadrate_Mittel_Blühpflanzen_n +
+  AZ + Qualität +
+  Prozentuale.Ab..zunahme, data = finka_statistik)
+
+
+
+
+
+```
+
