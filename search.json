@@ -11,7 +11,7 @@
     "href": "stats.html#anova",
     "title": "Statistik",
     "section": "ANOVA",
-    "text": "ANOVA\nUnterschiede zwischen den 3 Versuchsjahren und ihren Auswirkungen auf die Versuchsflächen.\n\n# Über alle Jahre und herbizidfreier Bewirtschaftung \n\nm1 &lt;- aov(Artenzahl_Plot_100_qm_Spontanflora_n ~ Jahr, data = finka_filter)\n\nsummary.lm(m1)\n\n\nCall:\naov(formula = Artenzahl_Plot_100_qm_Spontanflora_n ~ Jahr, data = finka_filter)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-8.7667 -3.2333  0.2333  3.2833  9.7667 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)   7.7000     0.7507  10.257   &lt;2e-16 ***\nJahr2022      1.5333     1.0617   1.444    0.152    \nJahr2023      1.0667     1.0617   1.005    0.318    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 4.112 on 87 degrees of freedom\nMultiple R-squared:  0.02458,   Adjusted R-squared:  0.002155 \nF-statistic: 1.096 on 2 and 87 DF,  p-value: 0.3387\n\n# Über alle Jahre und Bewirtschaftungen \n\nm2 &lt;- aov(Deckungsgrad_Segetalarten_prozent ~ Jahr, data = finka)\n\nsummary.lm(m2)\n\n\nCall:\naov(formula = Deckungsgrad_Segetalarten_prozent ~ Jahr, data = finka)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-19.695 -14.881  -8.881  10.305  75.305 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)  \n(Intercept) 5707.312   3216.682   1.774   0.0772 .\nJahr          -2.814      1.591  -1.769   0.0780 .\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 21.4 on 268 degrees of freedom\n  (5 observations deleted due to missingness)\nMultiple R-squared:  0.01154,   Adjusted R-squared:  0.007854 \nF-statistic:  3.13 on 1 and 268 DF,  p-value: 0.07802"
+    "text": "ANOVA\nUnterschiede zwischen den 3 Versuchsjahren und ihren Auswirkungen auf die Versuchsflächen.\n\n# Über alle Jahre und herbizidfreier Bewirtschaftung \n\nm1 &lt;- aov(Artenzahl_Plot_100_qm_Spontanflora_n ~ Jahr, data = finka_filter)\n\nsummary.lm(m1)\n\n\nCall:\naov(formula = Artenzahl_Plot_100_qm_Spontanflora_n ~ Jahr, data = finka_filter)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-8.7667 -3.2333  0.2333  3.2833  9.7667 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)   7.7000     0.7507  10.257   &lt;2e-16 ***\nJahr2022      1.5333     1.0617   1.444    0.152    \nJahr2023      1.0667     1.0617   1.005    0.318    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 4.112 on 87 degrees of freedom\nMultiple R-squared:  0.02458,   Adjusted R-squared:  0.002155 \nF-statistic: 1.096 on 2 and 87 DF,  p-value: 0.3387\n\n# Über alle Jahre und Bewirtschaftungen \n\nm2 &lt;- aov(Deckungsgrad_Segetalarten_prozent ~ Jahr, data = finka)\n\nsummary.lm(m2)\n\n\nCall:\naov(formula = Deckungsgrad_Segetalarten_prozent ~ Jahr, data = finka)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-19.695 -14.881  -8.881  10.305  75.305 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)  \n(Intercept) 5707.312   3216.682   1.774   0.0772 .\nJahr          -2.814      1.591  -1.769   0.0780 .\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 21.4 on 268 degrees of freedom\n  (5 observations deleted due to missingness)\nMultiple R-squared:  0.01154,   Adjusted R-squared:  0.007854 \nF-statistic:  3.13 on 1 and 268 DF,  p-value: 0.07802\n\n\nSiehe Boxplots"
   },
   {
     "objectID": "index.html",
@@ -77,6 +77,62 @@
     "text": "Bluehquadrate_Mittel_Blühpflanzen_n"
   },
   {
+    "objectID": "FINKA Paare.html#bewirtschaftung-deckungsgrad_kultur_prozent-1",
+    "href": "FINKA Paare.html#bewirtschaftung-deckungsgrad_kultur_prozent-1",
+    "title": "FINKA Paare",
+    "section": "Bewirtschaftung, Deckungsgrad_Kultur_prozent",
+    "text": "Bewirtschaftung, Deckungsgrad_Kultur_prozent"
+  },
+  {
+    "objectID": "FINKA Paare.html#deckungsgrad_segetalarten_prozent-1",
+    "href": "FINKA Paare.html#deckungsgrad_segetalarten_prozent-1",
+    "title": "FINKA Paare",
+    "section": "Deckungsgrad_Segetalarten_prozent",
+    "text": "Deckungsgrad_Segetalarten_prozent"
+  },
+  {
+    "objectID": "FINKA Paare.html#hoehe_segetalflora_m-1",
+    "href": "FINKA Paare.html#hoehe_segetalflora_m-1",
+    "title": "FINKA Paare",
+    "section": "Hoehe_Segetalflora_m",
+    "text": "Hoehe_Segetalflora_m"
+  },
+  {
+    "objectID": "FINKA Paare.html#artenzahl_hnv_kennarten_100_qm_n-1",
+    "href": "FINKA Paare.html#artenzahl_hnv_kennarten_100_qm_n-1",
+    "title": "FINKA Paare",
+    "section": "Artenzahl_HNV_Kennarten_100_qm_n",
+    "text": "Artenzahl_HNV_Kennarten_100_qm_n"
+  },
+  {
+    "objectID": "FINKA Paare.html#hoehe_der_kultur_m-1",
+    "href": "FINKA Paare.html#hoehe_der_kultur_m-1",
+    "title": "FINKA Paare",
+    "section": "Hoehe_der_Kultur_m",
+    "text": "Hoehe_der_Kultur_m"
+  },
+  {
+    "objectID": "FINKA Paare.html#artenzahl_plot_100_qm_gräser_n-1",
+    "href": "FINKA Paare.html#artenzahl_plot_100_qm_gräser_n-1",
+    "title": "FINKA Paare",
+    "section": "Artenzahl_Plot_100_qm_Gräser_n",
+    "text": "Artenzahl_Plot_100_qm_Gräser_n"
+  },
+  {
+    "objectID": "FINKA Paare.html#artenzahl_plot_100_qm_spontanflora_n-1",
+    "href": "FINKA Paare.html#artenzahl_plot_100_qm_spontanflora_n-1",
+    "title": "FINKA Paare",
+    "section": "Artenzahl_Plot_100_qm_Spontanflora_n",
+    "text": "Artenzahl_Plot_100_qm_Spontanflora_n"
+  },
+  {
+    "objectID": "FINKA Paare.html#bluehquadrate_mittel_blühpflanzen_n-1",
+    "href": "FINKA Paare.html#bluehquadrate_mittel_blühpflanzen_n-1",
+    "title": "FINKA Paare",
+    "section": "Bluehquadrate_Mittel_Blühpflanzen_n",
+    "text": "Bluehquadrate_Mittel_Blühpflanzen_n"
+  },
+  {
     "objectID": "FINKA_23.html",
     "href": "FINKA_23.html",
     "title": "FINKA Daten 23",
@@ -88,6 +144,6 @@
     "href": "FINKA_21_23.html",
     "title": "FINKA 2021-2023",
     "section": "",
-    "text": "Deckungsgrad_Segetalarten_prozent 2021-2023\nStatistik: siehe @stat-deckungsgrad-segetalarten-prozent\n\n\n\n\n\n\nFigure 1: Deckungsgrad Segetalarten in [%] zwischen 2021 bis 2023\n\n\n\n\n\nsiehe Figure 1\n\n\nBluehquadrate_Mittel_Blühpflanzen_n 2021-2023,\n\n\n\n\n\n\n\nInteraktiv: Deckungsgrad der Segetalarten in [%] über alle Paare 2021 - 2023\n\n\n\n\n\n\n\n\nInteraktiv: Bluehquadrate Blühpflanzen [n] über alle Paare 2021 - 2023\n\n\n\n\n\n\n\n\nÜbersicht: Bluehquadrate_Mittel_Blühpflanzen_n über alle Jahre und Kulturfrüchte"
+    "text": "Deckungsgrad_Segetalarten_prozent 2021-2023\nSiehe Statistik\n\n\n\n\n\n\nFigure 1: Deckungsgrad Segetalarten in [%] zwischen 2021 bis 2023\n\n\n\n\n\nsiehe Figure 1\n\n\nBluehquadrate_Mittel_Blühpflanzen_n 2021-2023,\n\n\n\n\n\n\n\nInteraktiv: Deckungsgrad der Segetalarten in [%] über alle Paare 2021 - 2023\n\n\n\n\n\n\n\n\nÜbersicht: Bluehquadrate_Mittel_Blühpflanzen_n über alle Jahre und Kulturfrüchte"
   }
 ]
