@@ -4,7 +4,7 @@
     "href": "stats.html",
     "title": "Statistik",
     "section": "",
-    "text": "# load libraries\nlibrary(tibble)\nlibrary(tidyr)\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(tidyselect)\nlibrary(readxl)\n\n# used stat libraries\nlibrary(Rcmdr)\nlibrary(car)\nlibrary(rgl)\n#' ## loading file\n# finka_statistik &lt;- read.delim(\"finka_statistik.csv\", sep=\",\")\n\nfinka &lt;- read.csv(\"finka_total.csv\")\n\n# Bodendaten laden \nbodendaten &lt;- read_xlsx(\"20230222_Anbaudaten_Standorte_Bodendaten_Messpunkte.xlsx\", 7)\n  # filter(row_number() &lt;= 95) %&gt;% \n  # mutate(Fieldtype = case_when(\n  #   Fläche  = \"MFK\" ~ \"m\",\n  #   Fläche  = \"VFK\" ~ \"k\",\n  #   Fläche  = \"VFB\" ~ \"b\",\n  #   TRUE ~ \"Unknown\"  # Handle Values outside the specified ranges\n  # ))\n  # filter(Fläche == \"MFK\")\n\n# Frage: MFK und co.\n\n# cleaning finka MFK\nfinka_filter &lt;- finka %&gt;%\n  separate(Schlagnummer.Plotnummer, into = c(\"ID\", \"Column2\"), sep = \"(?&lt;=\\\\d)(?=[A-Za-z])\") %&gt;% \n  mutate(ID = as.character(ID)) %&gt;%\n  filter(Bewirtschaftung == \"herbizidfrei\") %&gt;%\n  mutate(Jahr = as.character(Jahr))\n\n# cleaning finka_AZ\nfinka_filter_AZ &lt;- finka %&gt;% \n  # separate(Schlagnummer.Plotnummer, into = c(\"ID\", \"Column2\"), sep = \"(?&lt;=\\\\d)(?=[A-Za-z])\") %&gt;% \n  # mutate(ID = as.character(ID)) %&gt;%\n  filter(Bewirtschaftung == \"herbizidfrei\") %&gt;% \n  mutate(\n    Ackerzahl = case_when(\n      Ackerzahl == \"25-28\" ~ \"26\",\n      Ackerzahl == \"75-92\" ~ \"78\",\n      Ackerzahl == \"35-60\" ~ \"47\",\n      TRUE ~ as.character(Ackerzahl))) %&gt;%\n  mutate(Ackerzahl = as.numeric(Ackerzahl)) %&gt;% \n  mutate(Ackerzahl = ifelse(Jahr %in% c(2021, 2022), Ackerzahl[Jahr == 2023], Ackerzahl))\n# join der tabellen\n# bodendaten_join &lt;- bodendaten %&gt;% mutate(ID = as.character(ID))\n# \n# join &lt;- bodendaten_join %&gt;% inner_join(finka_filter_AZ, by = \"ID\")"
+    "text": "# load libraries\nlibrary(tibble)\nlibrary(tidyr)\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(tidyselect)\nlibrary(readxl)\n\n# used stat libraries\nlibrary(Rcmdr)\nlibrary(car)\nlibrary(rgl)\n#' ## loading file\n# finka_statistik &lt;- read.delim(\"finka_statistik.csv\", sep=\",\")\n\nfinka &lt;- read.csv(\"finka_total.csv\")\n\nfinka %&gt;% View()\n\n# Bodendaten laden \nbodendaten &lt;- read_xlsx(\"20230222_Anbaudaten_Standorte_Bodendaten_Messpunkte.xlsx\", 7)\n  # filter(row_number() &lt;= 95) %&gt;% \n  # mutate(Fieldtype = case_when(\n  #   Fläche  = \"MFK\" ~ \"m\",\n  #   Fläche  = \"VFK\" ~ \"k\",\n  #   Fläche  = \"VFB\" ~ \"b\",\n  #   TRUE ~ \"Unknown\"  # Handle Values outside the specified ranges\n  # ))\n  # filter(Fläche == \"MFK\")\n\n# Frage: MFK und co.\n\n# cleaning finka MFK\nfinka_filter &lt;- finka %&gt;%\n  separate(Schlagnummer.Plotnummer, into = c(\"ID\", \"Column2\"), sep = \"(?&lt;=\\\\d)(?=[A-Za-z])\") %&gt;% \n  mutate(ID = as.character(ID)) %&gt;%\n  filter(Bewirtschaftung == \"herbizidfrei\") %&gt;%\n  mutate(Jahr = as.character(Jahr))\n\n# cleaning finka_AZ\nfinka_filter_AZ &lt;- finka %&gt;% \n  # separate(Schlagnummer.Plotnummer, into = c(\"ID\", \"Column2\"), sep = \"(?&lt;=\\\\d)(?=[A-Za-z])\") %&gt;% \n  # mutate(ID = as.character(ID)) %&gt;%\n  filter(Bewirtschaftung == \"herbizidfrei\") %&gt;% \n  mutate(\n    Ackerzahl = case_when(\n      Ackerzahl == \"25-28\" ~ \"26\",\n      Ackerzahl == \"75-92\" ~ \"78\",\n      Ackerzahl == \"35-60\" ~ \"47\",\n      TRUE ~ as.character(Ackerzahl))) %&gt;%\n  mutate(Ackerzahl = as.numeric(Ackerzahl)) %&gt;% \n  mutate(Ackerzahl = ifelse(Jahr %in% c(2021, 2022), Ackerzahl[Jahr == 2023], Ackerzahl))\n# join der tabellen\n# bodendaten_join &lt;- bodendaten %&gt;% mutate(ID = as.character(ID))\n# \n# join &lt;- bodendaten_join %&gt;% inner_join(finka_filter_AZ, by = \"ID\")"
   },
   {
     "objectID": "stats.html#anova-jahr",
@@ -14,25 +14,46 @@
     "text": "ANOVA Jahr\nUnterschiede zwischen den 3 Versuchsjahren und ihren Auswirkungen auf die Versuchsflächen.\n\n# Über alle Jahre und herbizidfreier Bewirtschaftung \n\nm1 &lt;- aov(Artenzahl_Plot_100_qm_Spontanflora_n ~ Jahr, data = finka_filter)\n\nsummary.lm(m1)\n\n\nCall:\naov(formula = Artenzahl_Plot_100_qm_Spontanflora_n ~ Jahr, data = finka_filter)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-8.7667 -3.2333  0.2333  3.2833  9.7667 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)   7.7000     0.7507  10.257   &lt;2e-16 ***\nJahr2022      1.5333     1.0617   1.444    0.152    \nJahr2023      1.0667     1.0617   1.005    0.318    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 4.112 on 87 degrees of freedom\nMultiple R-squared:  0.02458,   Adjusted R-squared:  0.002155 \nF-statistic: 1.096 on 2 and 87 DF,  p-value: 0.3387\n\n# Über alle Jahre und Bewirtschaftungen \n\nm2 &lt;- aov(Deckungsgrad_Segetalarten_prozent ~ Jahr, data = finka)\n\nsummary.lm(m2)\n\n\nCall:\naov(formula = Deckungsgrad_Segetalarten_prozent ~ Jahr, data = finka)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-19.695 -14.881  -8.881  10.305  75.305 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)  \n(Intercept) 5707.312   3216.682   1.774   0.0772 .\nJahr          -2.814      1.591  -1.769   0.0780 .\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 21.4 on 268 degrees of freedom\n  (5 observations deleted due to missingness)\nMultiple R-squared:  0.01154,   Adjusted R-squared:  0.007854 \nF-statistic:  3.13 on 1 and 268 DF,  p-value: 0.07802\n\n\nSiehe Boxplots"
   },
   {
-    "objectID": "stats.html#anova-az-data---deckungsgrad_segetalarten_prozent",
-    "href": "stats.html#anova-az-data---deckungsgrad_segetalarten_prozent",
+    "objectID": "stats.html#anova-az-category-data",
+    "href": "stats.html#anova-az-category-data",
     "title": "Statistik",
-    "section": "ANOVA AZ Data - Deckungsgrad_Segetalarten_prozent",
-    "text": "ANOVA AZ Data - Deckungsgrad_Segetalarten_prozent\nBewertungsklasse Ertragsfähigkeit: Die Einteilung der Bewertungsklassen der natürlichen Ertragsfähigkeit von Böden nach der Ackerzahl orientiert sich am Bewertungsschema des Landesamt and Umweltschutz (2003):\n\n\n\nKategorie\nAZ\n\n\n\n\n\n\n\nsehr gering\n(&lt;28)\n\n\n\n\n\ngering\n(28-40)\n\n\n\n\n\nmittel\n(41-60)\n\n\n\n\n\nhoch\n(61-75)\n\n\n\n\n\nsehr hoch\n(&gt;75)\n\n\n\n\n\n\n\nfinka_AZ &lt;- finka_filter_AZ %&gt;% # Create a convenience variable based on factorization\n  mutate(Category = case_when(\n    Ackerzahl &lt; 28 ~ \"sehr gering (&lt;28)\",\n    Ackerzahl &gt;= 28 & Ackerzahl &lt;= 40 ~ \"gering (28-40)\",\n    Ackerzahl &gt;= 41 & Ackerzahl &lt;= 60 ~ \"mittel (41-60)\",\n    Ackerzahl &gt;= 61 & Ackerzahl &lt;= 75 ~ \"hoch (61-75)\",\n    Ackerzahl &gt; 75 ~ \"sehr hoch (&gt;75)\",\n    TRUE ~ \"Unknown\"  # Handle Values outside the specified ranges\n  )) %&gt;% \n  mutate(Category = factor(Category, levels = c(\n    \"sehr gering (&lt;28)\",\n    \"gering (28-40)\",\n    \"mittel (41-60)\",\n    \"hoch (61-75)\",\n    \"sehr hoch (&gt;75)\",\n    \"Unknown\"  # Include \"Unknown\" as a level for values outside the specified ranges\n  )))\n\n# Create a new data frame with the two columns side by side\n# comparison_df &lt;- data.frame(\n#   Ackerzahl = join_mutate$Ackerzahl,\n#   AZ = join_mutate$AZ\n# )\n\n# Display the comparison table using knitr::kable\n# knitr::kable(comparison_df)\n\n\nm1 &lt;- aov(Deckungsgrad_Segetalarten_prozent ~ Category, data = finka_AZ)\n\n# Variablen:\n# Deckungsgrad_Segetalarten_prozent\n# Bluehquadrate_Mittel_Blühpflanzen_n\n# Artenzahl_Plot_100_qm_Spontanflora_n\n\nsummary.lm(m1)\n\n\nCall:\naov(formula = Deckungsgrad_Segetalarten_prozent ~ Category, data = finka_AZ)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-31.367 -14.625  -4.625  10.375  70.571 \n\nCoefficients:\n                        Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)               19.625      4.516   4.346 3.87e-05 ***\nCategorygering (28-40)    12.742      6.059   2.103   0.0385 *  \nCategorymittel (41-60)     4.804      7.440   0.646   0.5203    \nCategoryhoch (61-75)      -9.625      7.822  -1.230   0.2220    \nCategorysehr hoch (&gt;75)  -17.014      8.648  -1.967   0.0524 .  \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 22.12 on 84 degrees of freedom\n  (1 observation deleted due to missingness)\nMultiple R-squared:  0.172, Adjusted R-squared:  0.1326 \nF-statistic: 4.363 on 4 and 84 DF,  p-value: 0.002963\n\n# boxplot(Deckungsgrad_Segetalarten_prozent ~ Category, data = join_mutate)\n\nfinka_AZ %&gt;% ggplot(aes(Category, Deckungsgrad_Segetalarten_prozent)) +\n  geom_boxplot()\n\n\n\n# Problem: AZ Data is partially missing (0 and 1): line 17"
+    "section": "ANOVA AZ-Category Data",
+    "text": "ANOVA AZ-Category Data\nBewertungsklasse Ertragsfähigkeit: Die Einteilung der Bewertungsklassen der natürlichen Ertragsfähigkeit von Böden nach der Ackerzahl orientiert sich am Bewertungsschema des Landesamt and Umweltschutz (2003):\n\n\n\nKategorie\nAZ\n\n\n\n\n\n\n\nsehr gering\n(&lt;28)\n\n\n\n\n\ngering\n(28-40)\n\n\n\n\n\nmittel\n(41-60)\n\n\n\n\n\nhoch\n(61-75)\n\n\n\n\n\nsehr hoch\n(&gt;75)\n\n\n\n\n\n\n\nfinka_AZ &lt;- finka_filter_AZ %&gt;% # Create a convenience variable based on factorization\n  mutate(Category = case_when(\n    Ackerzahl &lt; 28 ~ \"sehr gering (&lt;28)\",\n    Ackerzahl &gt;= 28 & Ackerzahl &lt;= 40 ~ \"gering (28-40)\",\n    Ackerzahl &gt;= 41 & Ackerzahl &lt;= 60 ~ \"mittel (41-60)\",\n    Ackerzahl &gt;= 61 & Ackerzahl &lt;= 75 ~ \"hoch (61-75)\",\n    Ackerzahl &gt; 75 ~ \"sehr hoch (&gt;75)\",\n    TRUE ~ \"Unknown\"  # Handle Values outside the specified ranges\n  )) %&gt;% \n  mutate(Category = factor(Category, levels = c(\n    \"sehr gering (&lt;28)\",\n    \"gering (28-40)\",\n    \"mittel (41-60)\",\n    \"hoch (61-75)\",\n    \"sehr hoch (&gt;75)\",\n    \"Unknown\"  # Include \"Unknown\" as a level for values outside the specified ranges\n  )))\n\n# Create a new data frame with the two columns side by side\n# comparison_df &lt;- data.frame(\n#   Ackerzahl = join_mutate$Ackerzahl,\n#   AZ = join_mutate$AZ\n# )\n\n# Display the comparison table using knitr::kable\n# knitr::kable(comparison_df)\n\n\nm1 &lt;- aov(Deckungsgrad_Segetalarten_prozent ~ Category, data = finka_AZ)\n\n# Variablen:\n# Deckungsgrad_Segetalarten_prozent\n# Bluehquadrate_Mittel_Blühpflanzen_n\n# Artenzahl_Plot_100_qm_Spontanflora_n\n\nsummary.lm(m1)\n\n\nCall:\naov(formula = Deckungsgrad_Segetalarten_prozent ~ Category, data = finka_AZ)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-31.367 -14.625  -4.625  10.375  70.571 \n\nCoefficients:\n                        Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)               19.625      4.516   4.346 3.87e-05 ***\nCategorygering (28-40)    12.742      6.059   2.103   0.0385 *  \nCategorymittel (41-60)     4.804      7.440   0.646   0.5203    \nCategoryhoch (61-75)      -9.625      7.822  -1.230   0.2220    \nCategorysehr hoch (&gt;75)  -17.014      8.648  -1.967   0.0524 .  \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 22.12 on 84 degrees of freedom\n  (1 observation deleted due to missingness)\nMultiple R-squared:  0.172, Adjusted R-squared:  0.1326 \nF-statistic: 4.363 on 4 and 84 DF,  p-value: 0.002963\n\n# boxplot(Deckungsgrad_Segetalarten_prozent ~ Category, data = join_mutate)\n\nfinka_AZ %&gt;% ggplot(aes(Category, Deckungsgrad_Segetalarten_prozent)) +\n  geom_boxplot()\n\n\n\n# Problem: AZ Data is partially missing (0 and 1): line 17"
   },
   {
-    "objectID": "stats.html#anova-az-data---artenzahl_plot_100_qm_spontanflora_n",
-    "href": "stats.html#anova-az-data---artenzahl_plot_100_qm_spontanflora_n",
+    "objectID": "stats.html#anova-az-numeric-data---deckungsgrad_segetalarten_prozent",
+    "href": "stats.html#anova-az-numeric-data---deckungsgrad_segetalarten_prozent",
     "title": "Statistik",
-    "section": "ANOVA AZ Data - Artenzahl_Plot_100_qm_Spontanflora_n",
-    "text": "ANOVA AZ Data - Artenzahl_Plot_100_qm_Spontanflora_n\n\nm1 &lt;- aov(Artenzahl_Plot_100_qm_Spontanflora_n ~ Category, data = finka_AZ)\n\nsummary.lm(m1)\n\n\nCall:\naov(formula = Artenzahl_Plot_100_qm_Spontanflora_n ~ Category, \n    data = finka_AZ)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-9.7333 -2.6250 -0.1667  2.8333 10.3333 \n\nCoefficients:\n                        Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)               7.3333     0.7864   9.326 1.18e-14 ***\nCategorygering (28-40)    2.8333     1.0550   2.686   0.0087 ** \nCategorymittel (41-60)    2.4000     1.2680   1.893   0.0618 .  \nCategoryhoch (61-75)     -1.8333     1.3620  -1.346   0.1819    \nCategorysehr hoch (&gt;75)   1.3333     1.5057   0.885   0.3784    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 3.852 on 85 degrees of freedom\nMultiple R-squared:  0.1636,    Adjusted R-squared:  0.1242 \nF-statistic: 4.155 on 4 and 85 DF,  p-value: 0.004017\n\n# boxplot(Deckungsgrad_Segetalarten_prozent ~ Category, data = join_mutate)\n\nfinka_AZ %&gt;% ggplot(aes(Category, Artenzahl_Plot_100_qm_Spontanflora_n)) +\n  geom_boxplot()\n\n\n\n# Problem: AZ Data is partially missing (0 and 1): line 17"
+    "section": "ANOVA AZ-Numeric Data - Deckungsgrad_Segetalarten_prozent",
+    "text": "ANOVA AZ-Numeric Data - Deckungsgrad_Segetalarten_prozent\n\nm1 &lt;- aov(Deckungsgrad_Segetalarten_prozent ~ Ackerzahl, data = finka_filter_AZ)\n\n# Variablen:\n# Deckungsgrad_Segetalarten_prozent\n# Bluehquadrate_Mittel_Blühpflanzen_n\n# Artenzahl_Plot_100_qm_Spontanflora_n\n\nsummary.lm(m1)\n\n\nCall:\naov(formula = Deckungsgrad_Segetalarten_prozent ~ Ackerzahl, \n    data = finka_filter_AZ)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-27.353 -15.528  -5.073  10.259  75.549 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)  35.6322     5.9648   5.974 4.95e-08 ***\nAckerzahl    -0.3112     0.1212  -2.568   0.0119 *  \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 23.03 on 87 degrees of freedom\n  (1 observation deleted due to missingness)\nMultiple R-squared:  0.07045,   Adjusted R-squared:  0.05977 \nF-statistic: 6.594 on 1 and 87 DF,  p-value: 0.01194\n\n# boxplot(Deckungsgrad_Segetalarten_prozent ~ Category, data = join_mutate)\n\nfinka_filter_AZ %&gt;% ggplot(aes(Ackerzahl, Deckungsgrad_Segetalarten_prozent)) +\n  geom_density_2d()\n\n\n\n# Problem: AZ Data is partially missing (0 and 1): line 17"
   },
   {
-    "objectID": "stats.html#anova-az-data---bluehquadrate_mittel_blühpflanzen_n",
-    "href": "stats.html#anova-az-data---bluehquadrate_mittel_blühpflanzen_n",
+    "objectID": "stats.html#anova-az-caterory-data",
+    "href": "stats.html#anova-az-caterory-data",
     "title": "Statistik",
-    "section": "ANOVA AZ Data - Bluehquadrate_Mittel_Blühpflanzen_n",
-    "text": "ANOVA AZ Data - Bluehquadrate_Mittel_Blühpflanzen_n\n\nm1 &lt;- aov(Bluehquadrate_Mittel_Blühpflanzen_n ~ Category, data = finka_AZ)\n\nsummary.lm(m1)\n\n\nCall:\naov(formula = Bluehquadrate_Mittel_Blühpflanzen_n ~ Category, \n    data = finka_AZ)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-44.511 -22.378  -7.505   4.320 266.042 \n\nCoefficients:\n                        Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)               38.958      9.388   4.150 7.86e-05 ***\nCategorygering (28-40)    11.886     12.595   0.944   0.3480    \nCategorymittel (41-60)    -5.981     15.137  -0.395   0.6938    \nCategoryhoch (61-75)     -31.542     16.260  -1.940   0.0557 .  \nCategorysehr hoch (&gt;75)  -30.032     17.976  -1.671   0.0985 .  \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 45.99 on 85 degrees of freedom\nMultiple R-squared:  0.1143,    Adjusted R-squared:  0.07266 \nF-statistic: 2.743 on 4 and 85 DF,  p-value: 0.03363\n\n# boxplot(Deckungsgrad_Segetalarten_prozent ~ Category, data = join_mutate)\n\nfinka_AZ %&gt;% ggplot(aes(Category, Bluehquadrate_Mittel_Blühpflanzen_n)) +\n  geom_boxplot()\n\n\n\n# Problem: AZ Data is partially missing (0 and 1): line 17"
+    "section": "ANOVA AZ-Caterory Data",
+    "text": "ANOVA AZ-Caterory Data\n\nm1 &lt;- aov(Artenzahl_Plot_100_qm_Spontanflora_n ~ Category, data = finka_AZ)\n\nsummary.lm(m1)\n\n\nCall:\naov(formula = Artenzahl_Plot_100_qm_Spontanflora_n ~ Category, \n    data = finka_AZ)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-9.7333 -2.6250 -0.1667  2.8333 10.3333 \n\nCoefficients:\n                        Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)               7.3333     0.7864   9.326 1.18e-14 ***\nCategorygering (28-40)    2.8333     1.0550   2.686   0.0087 ** \nCategorymittel (41-60)    2.4000     1.2680   1.893   0.0618 .  \nCategoryhoch (61-75)     -1.8333     1.3620  -1.346   0.1819    \nCategorysehr hoch (&gt;75)   1.3333     1.5057   0.885   0.3784    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 3.852 on 85 degrees of freedom\nMultiple R-squared:  0.1636,    Adjusted R-squared:  0.1242 \nF-statistic: 4.155 on 4 and 85 DF,  p-value: 0.004017\n\n# boxplot(Deckungsgrad_Segetalarten_prozent ~ Category, data = join_mutate)\n\nfinka_AZ %&gt;% ggplot(aes(Category, Artenzahl_Plot_100_qm_Spontanflora_n)) +\n  geom_boxplot()\n\n\n\n# Problem: AZ Data is partially missing (0 and 1): line 17"
+  },
+  {
+    "objectID": "stats.html#anova-az-numeric-data---artenzahl_plot_100_qm_spontanflora_n",
+    "href": "stats.html#anova-az-numeric-data---artenzahl_plot_100_qm_spontanflora_n",
+    "title": "Statistik",
+    "section": "ANOVA AZ-Numeric Data - Artenzahl_Plot_100_qm_Spontanflora_n",
+    "text": "ANOVA AZ-Numeric Data - Artenzahl_Plot_100_qm_Spontanflora_n\n\nm1 &lt;- aov(Artenzahl_Plot_100_qm_Spontanflora_n ~ Ackerzahl, data = finka_filter_AZ)\n\n# Variablen:\n# Deckungsgrad_Segetalarten_prozent\n# Bluehquadrate_Mittel_Blühpflanzen_n\n# Artenzahl_Plot_100_qm_Spontanflora_n\n\nsummary.lm(m1)\n\n\nCall:\naov(formula = Artenzahl_Plot_100_qm_Spontanflora_n ~ Ackerzahl, \n    data = finka_filter_AZ)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-8.4891 -2.8744 -0.1038  3.7228 10.9425 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)  9.25972    1.06874   8.664 2.02e-13 ***\nAckerzahl   -0.01541    0.02171  -0.710     0.48    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 4.128 on 88 degrees of freedom\nMultiple R-squared:  0.005696,  Adjusted R-squared:  -0.005603 \nF-statistic: 0.5041 on 1 and 88 DF,  p-value: 0.4796\n\n# boxplot(Deckungsgrad_Segetalarten_prozent ~ Category, data = join_mutate)\n\nfinka_filter_AZ %&gt;% ggplot(aes(Ackerzahl, Artenzahl_Plot_100_qm_Spontanflora_n)) +\n  geom_density_2d()\n\n\n\n# Problem: AZ Data is partially missing (0 and 1): line 17"
+  },
+  {
+    "objectID": "stats.html#anova-az-category-data-1",
+    "href": "stats.html#anova-az-category-data-1",
+    "title": "Statistik",
+    "section": "ANOVA AZ-Category Data",
+    "text": "ANOVA AZ-Category Data\n\nm1 &lt;- aov(Bluehquadrate_Mittel_Blühpflanzen_n ~ Category, data = finka_AZ)\n\nsummary.lm(m1)\n\n\nCall:\naov(formula = Bluehquadrate_Mittel_Blühpflanzen_n ~ Category, \n    data = finka_AZ)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-44.511 -22.378  -7.505   4.320 266.042 \n\nCoefficients:\n                        Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)               38.958      9.388   4.150 7.86e-05 ***\nCategorygering (28-40)    11.886     12.595   0.944   0.3480    \nCategorymittel (41-60)    -5.981     15.137  -0.395   0.6938    \nCategoryhoch (61-75)     -31.542     16.260  -1.940   0.0557 .  \nCategorysehr hoch (&gt;75)  -30.032     17.976  -1.671   0.0985 .  \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 45.99 on 85 degrees of freedom\nMultiple R-squared:  0.1143,    Adjusted R-squared:  0.07266 \nF-statistic: 2.743 on 4 and 85 DF,  p-value: 0.03363\n\n# boxplot(Deckungsgrad_Segetalarten_prozent ~ Category, data = join_mutate)\n\nfinka_AZ %&gt;% ggplot(aes(Category, Bluehquadrate_Mittel_Blühpflanzen_n)) +\n  geom_boxplot()\n\n\n\n# Problem: AZ Data is partially missing (0 and 1): line 17"
+  },
+  {
+    "objectID": "stats.html#anova-az-numeric-data",
+    "href": "stats.html#anova-az-numeric-data",
+    "title": "Statistik",
+    "section": "ANOVA AZ-Numeric Data",
+    "text": "ANOVA AZ-Numeric Data\n\nm1 &lt;- aov(Bluehquadrate_Mittel_Blühpflanzen_n ~ Ackerzahl, data = finka_filter_AZ)\n\n# Variablen:\n# Deckungsgrad_Segetalarten_prozent\n# Bluehquadrate_Mittel_Blühpflanzen_n\n# Artenzahl_Plot_100_qm_Spontanflora_n\n\nsummary.lm(m1)\n\n\nCall:\naov(formula = Bluehquadrate_Mittel_Blühpflanzen_n ~ Ackerzahl, \n    data = finka_filter_AZ)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-46.274 -24.244 -11.468   8.103 258.726 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)  60.7462    12.0580   5.038 2.49e-06 ***\nAckerzahl    -0.5789     0.2449  -2.364   0.0203 *  \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 46.57 on 88 degrees of freedom\nMultiple R-squared:  0.0597,    Adjusted R-squared:  0.04901 \nF-statistic: 5.587 on 1 and 88 DF,  p-value: 0.0203\n\n# boxplot(Deckungsgrad_Segetalarten_prozent ~ Category, data = join_mutate)\n\nfinka_filter_AZ %&gt;% ggplot(aes(Ackerzahl, Bluehquadrate_Mittel_Blühpflanzen_n)) +\n  geom_density_2d()\n\n\n\n# Problem: AZ Data is partially missing (0 and 1): line 17"
   },
   {
     "objectID": "FINKA_21_23.html",
@@ -63,116 +84,207 @@
     "text": "Bewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nÜbersicht: Kulturfrüchte & Bluehquadrate_Mittel_Blühpflanzen_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
   },
   {
-    "objectID": "FINKA Paare.html#bewirtschaftung-deckungsgrad_kultur_prozent",
-    "href": "FINKA Paare.html#bewirtschaftung-deckungsgrad_kultur_prozent",
+    "objectID": "FINKA Paare.html#betriebspaar01",
+    "href": "FINKA Paare.html#betriebspaar01",
     "title": "FINKA Paare 23",
-    "section": "Bewirtschaftung, Deckungsgrad_Kultur_prozent",
-    "text": "Bewirtschaftung, Deckungsgrad_Kultur_prozent"
+    "section": "Betriebspaar01",
+    "text": "Betriebspaar01\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
   },
   {
-    "objectID": "FINKA Paare.html#deckungsgrad_segetalarten_prozent",
-    "href": "FINKA Paare.html#deckungsgrad_segetalarten_prozent",
+    "objectID": "FINKA Paare.html#betriebspaar02",
+    "href": "FINKA Paare.html#betriebspaar02",
     "title": "FINKA Paare 23",
-    "section": "Deckungsgrad_Segetalarten_prozent",
-    "text": "Deckungsgrad_Segetalarten_prozent"
+    "section": "Betriebspaar02",
+    "text": "Betriebspaar02\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
   },
   {
-    "objectID": "FINKA Paare.html#hoehe_segetalflora_m",
-    "href": "FINKA Paare.html#hoehe_segetalflora_m",
+    "objectID": "FINKA Paare.html#betriebspaar03",
+    "href": "FINKA Paare.html#betriebspaar03",
     "title": "FINKA Paare 23",
-    "section": "Hoehe_Segetalflora_m",
-    "text": "Hoehe_Segetalflora_m"
+    "section": "Betriebspaar03",
+    "text": "Betriebspaar03\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
   },
   {
-    "objectID": "FINKA Paare.html#artenzahl_hnv_kennarten_100_qm_n",
-    "href": "FINKA Paare.html#artenzahl_hnv_kennarten_100_qm_n",
+    "objectID": "FINKA Paare.html#betriebspaar04",
+    "href": "FINKA Paare.html#betriebspaar04",
     "title": "FINKA Paare 23",
-    "section": "Artenzahl_HNV_Kennarten_100_qm_n",
-    "text": "Artenzahl_HNV_Kennarten_100_qm_n"
+    "section": "Betriebspaar04",
+    "text": "Betriebspaar04\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
   },
   {
-    "objectID": "FINKA Paare.html#hoehe_der_kultur_m",
-    "href": "FINKA Paare.html#hoehe_der_kultur_m",
+    "objectID": "FINKA Paare.html#betriebspaar05",
+    "href": "FINKA Paare.html#betriebspaar05",
     "title": "FINKA Paare 23",
-    "section": "Hoehe_der_Kultur_m",
-    "text": "Hoehe_der_Kultur_m"
+    "section": "Betriebspaar05",
+    "text": "Betriebspaar05\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
   },
   {
-    "objectID": "FINKA Paare.html#artenzahl_plot_100_qm_gräser_n",
-    "href": "FINKA Paare.html#artenzahl_plot_100_qm_gräser_n",
+    "objectID": "FINKA Paare.html#betriebspaar06",
+    "href": "FINKA Paare.html#betriebspaar06",
     "title": "FINKA Paare 23",
-    "section": "Artenzahl_Plot_100_qm_Gräser_n",
-    "text": "Artenzahl_Plot_100_qm_Gräser_n"
+    "section": "Betriebspaar06",
+    "text": "Betriebspaar06\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
   },
   {
-    "objectID": "FINKA Paare.html#artenzahl_plot_100_qm_spontanflora_n",
-    "href": "FINKA Paare.html#artenzahl_plot_100_qm_spontanflora_n",
+    "objectID": "FINKA Paare.html#betriebspaar07",
+    "href": "FINKA Paare.html#betriebspaar07",
     "title": "FINKA Paare 23",
-    "section": "Artenzahl_Plot_100_qm_Spontanflora_n",
-    "text": "Artenzahl_Plot_100_qm_Spontanflora_n"
+    "section": "Betriebspaar07",
+    "text": "Betriebspaar07\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
   },
   {
-    "objectID": "FINKA Paare.html#bluehquadrate_mittel_blühpflanzen_n",
-    "href": "FINKA Paare.html#bluehquadrate_mittel_blühpflanzen_n",
+    "objectID": "FINKA Paare.html#betriebspaar08",
+    "href": "FINKA Paare.html#betriebspaar08",
     "title": "FINKA Paare 23",
-    "section": "Bluehquadrate_Mittel_Blühpflanzen_n",
-    "text": "Bluehquadrate_Mittel_Blühpflanzen_n"
+    "section": "Betriebspaar08",
+    "text": "Betriebspaar08\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
   },
   {
-    "objectID": "FINKA Paare.html#bewirtschaftung-deckungsgrad_kultur_prozent-1",
-    "href": "FINKA Paare.html#bewirtschaftung-deckungsgrad_kultur_prozent-1",
+    "objectID": "FINKA Paare.html#betriebspaar09",
+    "href": "FINKA Paare.html#betriebspaar09",
     "title": "FINKA Paare 23",
-    "section": "Bewirtschaftung, Deckungsgrad_Kultur_prozent",
-    "text": "Bewirtschaftung, Deckungsgrad_Kultur_prozent"
+    "section": "Betriebspaar09",
+    "text": "Betriebspaar09\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
   },
   {
-    "objectID": "FINKA Paare.html#deckungsgrad_segetalarten_prozent-1",
-    "href": "FINKA Paare.html#deckungsgrad_segetalarten_prozent-1",
+    "objectID": "FINKA Paare.html#betriebspaar10",
+    "href": "FINKA Paare.html#betriebspaar10",
     "title": "FINKA Paare 23",
-    "section": "Deckungsgrad_Segetalarten_prozent",
-    "text": "Deckungsgrad_Segetalarten_prozent"
+    "section": "Betriebspaar10",
+    "text": "Betriebspaar10\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
   },
   {
-    "objectID": "FINKA Paare.html#hoehe_segetalflora_m-1",
-    "href": "FINKA Paare.html#hoehe_segetalflora_m-1",
+    "objectID": "FINKA Paare.html#betriebspaar11",
+    "href": "FINKA Paare.html#betriebspaar11",
     "title": "FINKA Paare 23",
-    "section": "Hoehe_Segetalflora_m",
-    "text": "Hoehe_Segetalflora_m"
+    "section": "Betriebspaar11",
+    "text": "Betriebspaar11\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
   },
   {
-    "objectID": "FINKA Paare.html#artenzahl_hnv_kennarten_100_qm_n-1",
-    "href": "FINKA Paare.html#artenzahl_hnv_kennarten_100_qm_n-1",
+    "objectID": "FINKA Paare.html#betriebspaar12",
+    "href": "FINKA Paare.html#betriebspaar12",
     "title": "FINKA Paare 23",
-    "section": "Artenzahl_HNV_Kennarten_100_qm_n",
-    "text": "Artenzahl_HNV_Kennarten_100_qm_n"
+    "section": "Betriebspaar12",
+    "text": "Betriebspaar12\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
   },
   {
-    "objectID": "FINKA Paare.html#hoehe_der_kultur_m-1",
-    "href": "FINKA Paare.html#hoehe_der_kultur_m-1",
+    "objectID": "FINKA Paare.html#betriebspaar13",
+    "href": "FINKA Paare.html#betriebspaar13",
     "title": "FINKA Paare 23",
-    "section": "Hoehe_der_Kultur_m",
-    "text": "Hoehe_der_Kultur_m"
+    "section": "Betriebspaar13",
+    "text": "Betriebspaar13\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
   },
   {
-    "objectID": "FINKA Paare.html#artenzahl_plot_100_qm_gräser_n-1",
-    "href": "FINKA Paare.html#artenzahl_plot_100_qm_gräser_n-1",
+    "objectID": "FINKA Paare.html#betriebspaar14",
+    "href": "FINKA Paare.html#betriebspaar14",
     "title": "FINKA Paare 23",
-    "section": "Artenzahl_Plot_100_qm_Gräser_n",
-    "text": "Artenzahl_Plot_100_qm_Gräser_n"
+    "section": "Betriebspaar14",
+    "text": "Betriebspaar14\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
   },
   {
-    "objectID": "FINKA Paare.html#artenzahl_plot_100_qm_spontanflora_n-1",
-    "href": "FINKA Paare.html#artenzahl_plot_100_qm_spontanflora_n-1",
+    "objectID": "FINKA Paare.html#betriebspaar15",
+    "href": "FINKA Paare.html#betriebspaar15",
     "title": "FINKA Paare 23",
-    "section": "Artenzahl_Plot_100_qm_Spontanflora_n",
-    "text": "Artenzahl_Plot_100_qm_Spontanflora_n"
+    "section": "Betriebspaar15",
+    "text": "Betriebspaar15\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
   },
   {
-    "objectID": "FINKA Paare.html#bluehquadrate_mittel_blühpflanzen_n-1",
-    "href": "FINKA Paare.html#bluehquadrate_mittel_blühpflanzen_n-1",
+    "objectID": "FINKA Paare.html#betriebspaar16",
+    "href": "FINKA Paare.html#betriebspaar16",
     "title": "FINKA Paare 23",
-    "section": "Bluehquadrate_Mittel_Blühpflanzen_n",
-    "text": "Bluehquadrate_Mittel_Blühpflanzen_n"
+    "section": "Betriebspaar16",
+    "text": "Betriebspaar16\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
+  },
+  {
+    "objectID": "FINKA Paare.html#betriebspaar17",
+    "href": "FINKA Paare.html#betriebspaar17",
+    "title": "FINKA Paare 23",
+    "section": "Betriebspaar17",
+    "text": "Betriebspaar17\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
+  },
+  {
+    "objectID": "FINKA Paare.html#betriebspaar18",
+    "href": "FINKA Paare.html#betriebspaar18",
+    "title": "FINKA Paare 23",
+    "section": "Betriebspaar18",
+    "text": "Betriebspaar18\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
+  },
+  {
+    "objectID": "FINKA Paare.html#betriebspaar19",
+    "href": "FINKA Paare.html#betriebspaar19",
+    "title": "FINKA Paare 23",
+    "section": "Betriebspaar19",
+    "text": "Betriebspaar19\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
+  },
+  {
+    "objectID": "FINKA Paare.html#betriebspaar20",
+    "href": "FINKA Paare.html#betriebspaar20",
+    "title": "FINKA Paare 23",
+    "section": "Betriebspaar20",
+    "text": "Betriebspaar20\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
+  },
+  {
+    "objectID": "FINKA Paare.html#betriebspaar21",
+    "href": "FINKA Paare.html#betriebspaar21",
+    "title": "FINKA Paare 23",
+    "section": "Betriebspaar21",
+    "text": "Betriebspaar21\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
+  },
+  {
+    "objectID": "FINKA Paare.html#betriebspaar23",
+    "href": "FINKA Paare.html#betriebspaar23",
+    "title": "FINKA Paare 23",
+    "section": "Betriebspaar23",
+    "text": "Betriebspaar23\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
+  },
+  {
+    "objectID": "FINKA Paare.html#betriebspaar24",
+    "href": "FINKA Paare.html#betriebspaar24",
+    "title": "FINKA Paare 23",
+    "section": "Betriebspaar24",
+    "text": "Betriebspaar24\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
+  },
+  {
+    "objectID": "FINKA Paare.html#betriebspaar25",
+    "href": "FINKA Paare.html#betriebspaar25",
+    "title": "FINKA Paare 23",
+    "section": "Betriebspaar25",
+    "text": "Betriebspaar25\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
+  },
+  {
+    "objectID": "FINKA Paare.html#betriebspaar26",
+    "href": "FINKA Paare.html#betriebspaar26",
+    "title": "FINKA Paare 23",
+    "section": "Betriebspaar26",
+    "text": "Betriebspaar26\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
+  },
+  {
+    "objectID": "FINKA Paare.html#betriebspaar27",
+    "href": "FINKA Paare.html#betriebspaar27",
+    "title": "FINKA Paare 23",
+    "section": "Betriebspaar27",
+    "text": "Betriebspaar27\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
+  },
+  {
+    "objectID": "FINKA Paare.html#betriebspaar29",
+    "href": "FINKA Paare.html#betriebspaar29",
+    "title": "FINKA Paare 23",
+    "section": "Betriebspaar29",
+    "text": "Betriebspaar29\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
+  },
+  {
+    "objectID": "FINKA Paare.html#betriebspaar30",
+    "href": "FINKA Paare.html#betriebspaar30",
+    "title": "FINKA Paare 23",
+    "section": "Betriebspaar30",
+    "text": "Betriebspaar30\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
+  },
+  {
+    "objectID": "FINKA Paare.html#betriebspaar31",
+    "href": "FINKA Paare.html#betriebspaar31",
+    "title": "FINKA Paare 23",
+    "section": "Betriebspaar31",
+    "text": "Betriebspaar31\n\nBewirtschaftung, Deckungsgrad_Kultur_prozent\n\n\n\n\n\n\n\nDeckungsgrad_Segetalarten_prozent\n\n\n\n\n\n\n\nHoehe_Segetalflora_m\n\n\n\n\n\n\n\nArtenzahl_HNV_Kennarten_100_qm_n\n\n\n\n\n\n\n\nHoehe_der_Kultur_m\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Gräser_n\n\n\n\n\n\n\n\nArtenzahl_Plot_100_qm_Spontanflora_n\n\n\n\n\n\n\n\nBluehquadrate_Mittel_Blühpflanzen_n"
   },
   {
     "objectID": "index.html",
@@ -180,5 +292,12 @@
     "title": "Flora-Data Zum Projekt FINKA",
     "section": "",
     "text": "Credentials\n➡️ Dr. Stefan Meyer\n➡️ MSc. Johannes Quente\nEmail: johannes.quente@gmail.com\nThis is a Quarto website"
+  },
+  {
+    "objectID": "Transekt.html",
+    "href": "Transekt.html",
+    "title": "Transekt",
+    "section": "",
+    "text": "We filter the data using dplyr to include only the relevant plots and plants.\nWe create a bar plot, a heatmap, and a ridge plot to visualize plant occurrences in each plot.\nWe use cowplot to arrange the plots side by side.\n\nYou can customize these plots based on the specific details of your dataset and the type of information you want to convey. Adjust the plot aesthetics, color schemes, and labels as needed for your data."
   }
 ]
