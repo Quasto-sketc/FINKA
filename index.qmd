@@ -1,0 +1,15 @@
+---
+title: "Data FINKA´23 Webseite"
+---
+
+This is a Quarto website.
+
+To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+
+# Credentials
+
+MSC. Johannes Quente
+
+**Email:** johannes.quente\@gmail.com
+
+![](images/DSC07951_pp.JPG){fig-align="center"}
